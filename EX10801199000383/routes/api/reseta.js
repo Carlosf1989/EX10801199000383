@@ -1,6 +1,6 @@
 var var express = require ('espress');
 var router = express.router();
-
+var uuid =require('uuid/v4');
 var resetaaCollection =[];
 
 var resetaStruct ={
@@ -32,12 +32,31 @@ router.post('/',(req, res, next)=>{
     });//post
 
 
-router.put('/',(req, res, next)=>{
-    res.status(403).json({msg:"not implemented"});
-});
+    router.put('/:id',(req, res, next)=>{
+        var id = req.params.id;
+        var modifiedreseta = {};
+        var originalreseta = {};
+        resetaCollection = resetaCollection.map((e, i)=>{
+            if(e.id === id){
+                originalreseta =Object.assign({}, e);
+                return modifiedreseta = Object.assign({}, e, req.body);
+            }
+            return e;
+        });//map
+        res.status(200).json({o: originalreseta, m: modifiedreseta});
+    });//put
 
-router.delete('/',(req, res, next)=>{
-    res.status(403).json({msg:"not implemented"});
-});
+    router.delete('/:id',(req, res, next)=>{
+        var id = req.params.id;
+        var deletedreseta = {};
+        resetaCollection =resetaCollection.filter((e,i)=>{
+            if (e,id === id){
+                deletedreseta = Object.assign({},e);
+                return false;
+            }
+            return true;
+        });
+        res.status(200).json({d:deletedreseta, c:resetaCollection});
+    });//delete
 
 module.exports = router;
